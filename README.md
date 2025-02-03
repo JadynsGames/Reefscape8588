@@ -15,4 +15,4 @@ Official FRC Team 8588 2025 Repo as of 1/29/24
 11. Learn coding concepts
 12. Make our Kitbot look fun! (LEDs, stickers, drawings)
 
-Contact jadyn.monaco@mcvts.org or moosa.awais@mcvts.org for questions!
+Contact jadyn.monaco@mcvts.org or muhammad.awais@mcvts.org for questions!
