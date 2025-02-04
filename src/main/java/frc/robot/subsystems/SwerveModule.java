@@ -28,10 +28,11 @@ public class SwerveModule {
         private final SparkMax m_turningSparkMax;
         private final SparkMax m_drivingSparkMax;
 
-        private final SparkBaseConfig sBaseConfig_turningSparkMax;
-        private final SparkBaseConfig sBaseConfig_drivingSparkMax;
+         //private final SparkBaseConfig sBaseConfig_turningSparkMax;
+        // private final SparkBaseConfig sBaseConfig_drivingSparkMax;
 
         private final SparkMaxConfig c_turningSparkMax;
+        private final SparkMaxConfig c_drivingSparkMax;
 
         private final RelativeEncoder m_drivingEncoder;
         private final AbsoluteEncoder m_turningEncoder;
@@ -50,22 +51,32 @@ public class SwerveModule {
 
         public SwerveModule(int kTurningCanID, int kDrivingCanID, double chassisAngularOffset,
                         Translation2d m_moduleLocation) {
+
                 m_turningSparkMax = new SparkMax(kTurningCanID, MotorType.kBrushless);
                 m_drivingSparkMax = new SparkMax(kDrivingCanID, MotorType.kBrushless);
 
-                SparkMaxConfig c_drivingSparkMax = new SparkMaxConfig();
+                m_drivingEncoder = m_drivingSparkMax.getEncoder();
+
+                
+
+                m_turningClosedLoopConfig = new ClosedLoopConfig();
+                m_drivingClosedLoopConfig = new ClosedLoopConfig();
+
+                c_drivingSparkMax = new SparkMaxConfig();
+                
                 c_drivingSparkMax.signals.primaryEncoderPositionPeriodMs(kDrivingCanID); // Set encoder update period
                 m_drivingSparkMax.configure(c_drivingSparkMax, null, null);
 
                 // WE NEED TO FIX THIS IDK WHY THESE TWO LINES ARENT WORKING BUT THEY ARE INTEGRAL
                 // IT DOESN't INSTANTIATE FOR SOME REASON
-                sBaseConfig_turningSparkMax = new SparkBaseConfig();
-                sBaseConfig_drivingSparkMax = new SparkBaseConfig();
+                // sBaseConfig_turningSparkMax = new SparkBaseConfig(); 
+                // sBaseConfig_drivingSparkMax = new SparkBaseConfig();
 
                 c_turningSparkMax = new SparkMaxConfig();
                 c_turningSparkMax.signals.primaryEncoderPositionPeriodMs(kDrivingCanID); // Set encoder update period
                 m_turningSparkMax.configure(c_turningSparkMax, null, null);
-
+                
+                
                 m_turningEncoder = m_turningSparkMax.getAbsoluteEncoder();
 
                 m_turningPidController = m_turningSparkMax.getClosedLoopController();
@@ -92,7 +103,7 @@ public class SwerveModule {
                                 .pid(Constants.DriveConstants.kDrivingP, Constants.DriveConstants.kDrivingI,
                                                 Constants.DriveConstants.kDrivingD);
 
-                sBaseConfig_turningSparkMax.smartCurrentLimit(kDrivingCanID);
+                c_turningSparkMax.smartCurrentLimit(kDrivingCanID);
                 m_turningClosedLoopConfig.positionWrappingEnabled(true);
 
                 m_turningClosedLoopConfig
@@ -103,7 +114,7 @@ public class SwerveModule {
                 m_drivingClosedLoopConfig.minOutput(-1);
                 m_drivingClosedLoopConfig.maxOutput(1);
 
-                sBaseConfig_drivingSparkMax.smartCurrentLimit(kDrivingCanID);
+                c_drivingSparkMax.smartCurrentLimit(kDrivingCanID);
 
                 m_chassisAngularOffset = chassisAngularOffset;
                 this.m_moduleLocation = m_moduleLocation;
