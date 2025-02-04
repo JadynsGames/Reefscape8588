@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+// import edu.wpi.first.wpilibj2.command.Command;
 // Import necessary classes and subsystems
 /*import frc.robot.Constants.OperatorConstants; // Constants for operator settings
 import edu.wpi.first.wpilibj2.command.Command; // Command base class
@@ -18,6 +19,8 @@ import frc.robot.commands.AutonCommand; // Autonomous command
 import frc.robot.commands.DefaultDrive; // Default driving command
 import frc.robot.subsystems.Dumpster;
 import frc.robot.subsystems.SwerveSubsystem; // Swerve drive subsystem for movement
+import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 
 
 /**
@@ -30,11 +33,12 @@ public class RobotContainer {
   public static final SwerveSubsystem m_Swerb = new SwerveSubsystem();
   public static final Dumpster dumpster = new Dumpster();
 
-
   public static final AutonCommand m_autonCommand = new AutonCommand();
   // Create an Xbox controller instance to handle driver input (0 is the port
   // number)
   public static CommandXboxController driverController = new CommandXboxController(0);
+  public static CommandPS5Controller ps5Controller2 = new CommandPS5Controller(0);
+  public static EventLoop evLoop = new EventLoop();
 
   /**
    * Constructor for RobotContainer. This is called when the robot is initialized.
@@ -65,7 +69,14 @@ public class RobotContainer {
               dumpster.releaseCoral(0);
             }));
 
+    ps5Controller2.square()
+        .onTrue(new StartEndCommand(
+            () -> 
+            dumpster.releaseCoral(0.2), 
+            () -> dumpster.releaseCoral(0)));
   }
+
+
 
   /**
    * This method provides the command to run during the autonomous phase.
