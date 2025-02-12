@@ -1,6 +1,9 @@
 # Reefscape8588
 Official FRC Team 8588 2025 Repo as of 1/29/24
 
+OFFICIAL SwerveKitbot Repo: https://github.com/JadynsGames/SwerveKitbot2025
+OFFICIAL TankKitbot Repo: https://github.com/JadynsGames/TankDrive2025/tree/2/4/25-Working
+
 <strong>TODO:</strong>
 1. FIX Rev Robotics Imports & ensure branch SwerveKitbot Compiles
 2. Make branch Differential Kitbot using finished swerve as a base
