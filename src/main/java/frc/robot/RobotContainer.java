@@ -107,6 +107,17 @@ public class RobotContainer {
               true
             ), 
             m_robotDrive));
+    
+    new JoystickButton(m_driverController, Button.kL1.value)
+        .whileTrue(new RunCommand(
+            () -> m_robotDrive.drive(
+              -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+              -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+              m_photonVisionCam2.getYaw(), // * VISION_TURN_kP
+              true
+            ), 
+            m_robotDrive));
+
   }
 
  /* private void configureButtonBindingsXbox() {
