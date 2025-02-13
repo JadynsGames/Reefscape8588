@@ -51,9 +51,9 @@ public class VisionSubsystem extends SubsystemBase {
         AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
         Transform3d robotToCam;
         if (cameraName == "Cam 1") {
-            robotToCam = new Transform3d(new Translation3d(0.36, 0.0, -0.17), new Rotation3d(0,0,0));
+            robotToCam = new Transform3d(new Translation3d(0.381, 0.0, -0.10), new Rotation3d(0,0,0));
         } else {
-            robotToCam = new Transform3d(new Translation3d(-0.36, 0.0, 0), new Rotation3d(0,0,180));
+            robotToCam = new Transform3d(new Translation3d(-0.356, 0.0, 0.05), new Rotation3d(0,0,180));
         }
         photonEstimator =
                 new PhotonPoseEstimator(
