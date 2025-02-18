@@ -51,8 +51,10 @@ public class VisionSubsystem extends SubsystemBase {
         AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
         Transform3d robotToCam;
         if (cameraName == "Cam 1") {
+            // Cam 1 to robot
             robotToCam = new Transform3d(new Translation3d(0.381, 0.0, -0.10), new Rotation3d(0,0,0));
         } else {
+            // Cam 2 to robot
             robotToCam = new Transform3d(new Translation3d(-0.356, 0.0, 0.05), new Rotation3d(0,0,180));
         }
         photonEstimator =
@@ -121,12 +123,16 @@ public class VisionSubsystem extends SubsystemBase {
 
     public double getYaw() {
         getLatestResult();
-        if (latestResult.hasTargets() && latestResult != null) {
+        if (latestResult != null && latestResult.hasTargets()) {
             var target = latestResult.getBestTarget();
             lastYaw = target.getYaw();
             return target.getYaw();
         }
-        return lastYaw;
+        if (Math.abs(lastYaw) < 1) {
+            return 0;
+        } else {
+            return lastYaw;
+        }
     }
 
 }

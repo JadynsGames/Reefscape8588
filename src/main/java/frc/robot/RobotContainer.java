@@ -21,6 +21,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.Constants.PhotonVision;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -43,7 +44,7 @@ public class RobotContainer {
   private final Dumpster m_dumpster = new Dumpster();
   private final VisionSubsystem m_photonVisionCam1 = new VisionSubsystem("Cam 1");
   private final VisionSubsystem m_photonVisionCam2 = new VisionSubsystem("Cam 2");
-
+  private final PIDController m_visionTurnController = new PIDController(PhotonVision.visionTurnkP, 0, PhotonVision.visionTurnkD);
 
   // The driver's controller
   //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -53,6 +54,7 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    m_visionTurnController.setTolerance(1);
     // Configure the button bindings
     configureButtonBindings();
     // XBOX VERSION
@@ -81,6 +83,12 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+    // SET ZERO YAW
+    new JoystickButton(m_driverController, Button.kTriangle.value)
+        .whileTrue(new RunCommand(
+            () -> m_robotDrive.zeroHeading(),
+            m_robotDrive));
+    
     // DRIVE KILLSWITCH
     new JoystickButton(m_driverController, Button.kL3.value)
         .whileTrue(new RunCommand(
@@ -91,11 +99,21 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kR2.value)
         .whileTrue(new StartEndCommand(
             () -> {
-              m_dumpster.runDumpster(0.2);
+              m_dumpster.runDumpster(0.6);
             },
             () -> {
               m_dumpster.runDumpster(0);
             }));
+
+    // REVERSE DUMPSTER
+    new JoystickButton(m_driverController, Button.kL2.value)
+    .whileTrue(new StartEndCommand(
+        () -> {
+          m_dumpster.runDumpster(-0.6);
+        },
+        () -> {
+          m_dumpster.runDumpster(0);
+        }));
 
     // VISION
     new JoystickButton(m_driverController, Button.kR1.value)
@@ -103,7 +121,7 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
               -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
               -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-              -1.0 * m_photonVisionCam1.getYaw(), // * VISION_TURN_kP
+              1.0 * m_visionTurnController.calculate(m_photonVisionCam1.getYaw(),0),
               true
             ), 
             m_robotDrive));
@@ -113,7 +131,7 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
               -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
               -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-              m_photonVisionCam2.getYaw(), // * VISION_TURN_kP
+              1.0 * m_visionTurnController.calculate(m_photonVisionCam2.getYaw(),0),
               true
             ), 
             m_robotDrive));
