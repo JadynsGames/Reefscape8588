@@ -66,9 +66,9 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftY() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftX() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getRightX() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
   }
@@ -99,7 +99,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kR2.value)
         .whileTrue(new StartEndCommand(
             () -> {
-              m_dumpster.runDumpster(0.6);
+              m_dumpster.runDumpster(0.4);
             },
             () -> {
               m_dumpster.runDumpster(0);
@@ -109,7 +109,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kL2.value)
     .whileTrue(new StartEndCommand(
         () -> {
-          m_dumpster.runDumpster(-0.6);
+          m_dumpster.runDumpster(-0.4);
         },
         () -> {
           m_dumpster.runDumpster(0);
@@ -119,8 +119,8 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kR1.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.drive(
-              -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-              -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+              -MathUtil.applyDeadband(m_driverController.getLeftY() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
+              -MathUtil.applyDeadband(m_driverController.getLeftX() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
               1.0 * m_visionTurnController.calculate(m_photonVisionCam1.getYaw(),0),
               true
             ), 
@@ -129,8 +129,8 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kL1.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.drive(
-              -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-              -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+              -MathUtil.applyDeadband(m_driverController.getLeftY() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
+              -MathUtil.applyDeadband(m_driverController.getLeftX() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
               1.0 * m_visionTurnController.calculate(m_photonVisionCam2.getYaw(),0),
               true
             ), 

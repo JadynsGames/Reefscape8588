@@ -45,6 +45,8 @@ public final class Constants {
   }
 
   public static final class DriveConstants {
+    // Lower speed by percentage
+    public static final double kDriveThrottle = 0.5;
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.8;
@@ -112,8 +114,8 @@ public final class Constants {
         public static final Matrix<N3, N1> multiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
         // Constants for the vision "align" controller
-        public static final double visionTurnkP = 0.02;
-        public static final double visionTurnkD = 0.00;
+        public static final double visionTurnkP = 0.017;
+        public static final double visionTurnkD = 0.0005;
   }
 
   public static final class OIConstants {
