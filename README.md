@@ -1,4 +1,4 @@
-# SwerveKitbot2025
+# SwerveBot - AutonL Path (only use if starting at left-most side of the field)
  2/18/25 MAXSwerve-Java-Template Fork w/ Dumpster
 
 - Works w/ PS5 controller, Xbox code is commented out
