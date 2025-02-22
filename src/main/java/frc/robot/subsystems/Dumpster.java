@@ -19,7 +19,7 @@ public class Dumpster extends SubsystemBase {
   private SparkMax m_dumpsterDown;
 
   public Dumpster() {
-    m_dumpsterDown =  new SparkMax(Constants.SubsystemConstants.kDumpsterId, MotorType.kBrushed);
+    m_dumpsterDown =  new SparkMax(Constants.SubsystemConstants.kDumpsterId, MotorType.kBrushless);
     SparkMaxConfig globalConfig = new SparkMaxConfig();
 
     globalConfig
