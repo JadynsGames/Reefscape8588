@@ -22,6 +22,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.Constants.PhotonVision;
+import frc.robot.Constants.SubsystemConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -95,11 +96,21 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
+    // LOWER DUMPSTER SPEED
+    new JoystickButton(m_driverController, Button.kR3.value)
+        .whileTrue(new StartEndCommand(
+            () -> {
+              m_dumpster.slowMode(true);
+            },
+            () -> {
+              m_dumpster.slowMode(false);
+            }));
+
     // DUMPSTER
     new JoystickButton(m_driverController, Button.kR2.value)
         .whileTrue(new StartEndCommand(
             () -> {
-              m_dumpster.runDumpster(0.4);
+              m_dumpster.runDumpster(-1);
             },
             () -> {
               m_dumpster.runDumpster(0);
@@ -109,7 +120,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kL2.value)
     .whileTrue(new StartEndCommand(
         () -> {
-          m_dumpster.runDumpster(-0.4);
+          m_dumpster.runDumpster(1);
         },
         () -> {
           m_dumpster.runDumpster(0);
@@ -137,24 +148,6 @@ public class RobotContainer {
             m_robotDrive));
 
   }
-
- /* private void configureButtonBindingsXbox() {
-    // DRIVE (INCLUDES KILL SWITCH on B press)
-    new JoystickButton(m_driverController, Button.kB.value)
-        .whileFalse(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
-
-    // DUMPSTER
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .whileTrue(new StartEndCommand(
-            () -> {
-              m_dumpster.runDumpster(0.2);
-            },
-            () -> {
-              m_dumpster.runDumpster(0);
-            }));
-  }*/
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

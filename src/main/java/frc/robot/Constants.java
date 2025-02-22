@@ -42,6 +42,10 @@ public final class Constants {
   public static final class SubsystemConstants {
     // SPARK MAX CAN IDS
     public static final int kDumpsterId = 12;
+    
+    // DRIVING CONSTANTS
+    public static final double kDumpsterFast = 0.5;
+    public static final double kDumpsterSlow = 0.3;
   }
 
   public static final class DriveConstants {

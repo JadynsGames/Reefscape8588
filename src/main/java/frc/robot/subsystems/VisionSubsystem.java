@@ -128,9 +128,10 @@ public class VisionSubsystem extends SubsystemBase {
             lastYaw = target.getYaw();
             return target.getYaw();
         }
-        if (Math.abs(lastYaw) < 1) {
+        if (Math.abs(lastYaw) < 2) {
             return 0;
         } else {
+            lastYaw=0;
             return lastYaw;
         }
     }
