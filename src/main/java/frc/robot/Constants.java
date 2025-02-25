@@ -8,23 +8,17 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
-import java.io.IOException;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -42,9 +36,15 @@ public final class Constants {
   public static final class SubsystemConstants {
     // SPARK MAX CAN IDS
     public static final int kDumpsterId = 12;
+    
+    // DRIVING CONSTANTS
+    public static final double kDumpsterFast = 0.5;
+    public static final double kDumpsterSlow = 0.3;
   }
 
   public static final class DriveConstants {
+    // Lower speed by percentage
+    public static final double kDriveThrottle = 0.5;
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.8;
@@ -112,8 +112,11 @@ public final class Constants {
         public static final Matrix<N3, N1> multiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
         // Constants for the vision "align" controller
-        public static final double visionTurnkP = 0.02;
-        public static final double visionTurnkD = 0.00;
+        public static final double visionTurnkP = 0.017;
+        public static final double visionTurnkD = 0.0005;
+        // Constants for the vision "drive" controller
+        public static final double visionDrivekP = 0.0;
+        public static final double visionDrivekD = 0.0;
   }
 
   public static final class OIConstants {

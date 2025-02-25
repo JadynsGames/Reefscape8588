@@ -9,24 +9,17 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-
-
-import frc.robot.Constants;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -45,6 +38,7 @@ public class VisionSubsystem extends SubsystemBase {
     private PhotonPipelineResult latestResult = null;
     private double lastEstTimestamp = 0;
     private double lastYaw = 0;
+    private double targetRange;
     
     public VisionSubsystem(String cameraName) {
         camera = new PhotonCamera(cameraName);
@@ -126,13 +120,29 @@ public class VisionSubsystem extends SubsystemBase {
         if (latestResult != null && latestResult.hasTargets()) {
             var target = latestResult.getBestTarget();
             lastYaw = target.getYaw();
+
             return target.getYaw();
         }
-        if (Math.abs(lastYaw) < 1) {
+        if (Math.abs(lastYaw) < 5) {
             return 0;
         } else {
             return lastYaw;
         }
+    }
+
+    public double getDistance() {
+        getLatestResult();
+        if (latestResult != null && latestResult.hasTargets()) {
+            var target = latestResult.getBestTarget();
+            targetRange =
+                                PhotonUtils.calculateDistanceToTargetMeters(
+                                        0.5, // Measured with a tape measure, or in CAD.
+                                        1.435, // From 2024 game manual for ID 7
+                                        Units.degreesToRadians(-30.0), // Measured with a protractor, or in CAD.
+                                        Units.degreesToRadians(target.getPitch()));
+            return targetRange;
+        }
+        return 0.0;
     }
 
 }

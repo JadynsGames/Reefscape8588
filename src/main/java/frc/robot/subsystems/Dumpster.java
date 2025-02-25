@@ -12,11 +12,13 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import frc.robot.Constants;
-
+import frc.robot.Constants.SubsystemConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Dumpster extends SubsystemBase {
   private SparkMax m_dumpsterDown;
+
+  private double dumpsterSpeed = SubsystemConstants.kDumpsterFast;
 
   public Dumpster() {
     m_dumpsterDown =  new SparkMax(Constants.SubsystemConstants.kDumpsterId, MotorType.kBrushless);
@@ -29,18 +31,17 @@ public class Dumpster extends SubsystemBase {
     m_dumpsterDown.configure(globalConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
   }
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
+  
   public void runDumpster(double speed) {
-    if(speed > 1){
-        speed = 1;
-    } else if(speed < -1){
-        speed = -1;
+    m_dumpsterDown.set(dumpsterSpeed*speed);
+  }
+
+  public void slowMode(boolean isSlow) {
+    if (isSlow) {
+      dumpsterSpeed = SubsystemConstants.kDumpsterSlow;
+    } else {
+      dumpsterSpeed = SubsystemConstants.kDumpsterFast;
     }
-    m_dumpsterDown.set(speed);
   }
 
   @Override

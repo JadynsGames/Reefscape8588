@@ -52,6 +52,8 @@ public class RobotContainer {
   private final VisionSubsystem m_photonVisionCam1 = new VisionSubsystem("Cam 1");
   private final VisionSubsystem m_photonVisionCam2 = new VisionSubsystem("Cam 2");
   private final PIDController m_visionTurnController = new PIDController(PhotonVision.visionTurnkP, 0, PhotonVision.visionTurnkD);
+  private final PIDController m_visionDriveController = new PIDController(PhotonVision.visionDrivekP, 0, PhotonVision.visionDrivekD);
+
 
   private final SendableChooser<Command> autoChooser_L;
   private final SendableChooser<Command> autoChooser_R;
@@ -77,9 +79,9 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftY() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftX() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getRightX() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
 
@@ -122,11 +124,21 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
+    // LOWER DUMPSTER SPEED
+    new JoystickButton(m_driverController, Button.kR3.value)
+        .whileTrue(new StartEndCommand(
+            () -> {
+              m_dumpster.slowMode(true);
+            },
+            () -> {
+              m_dumpster.slowMode(false);
+            }));
+
     // DUMPSTER
     new JoystickButton(m_driverController, Button.kR2.value)
         .whileTrue(new StartEndCommand(
             () -> {
-              m_dumpster.runDumpster(0.6);
+              m_dumpster.runDumpster(-1);
             },
             () -> {
               m_dumpster.runDumpster(0);
@@ -136,7 +148,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kL2.value)
     .whileTrue(new StartEndCommand(
         () -> {
-          m_dumpster.runDumpster(-0.6);
+          m_dumpster.runDumpster(1);
         },
         () -> {
           m_dumpster.runDumpster(0);
@@ -146,8 +158,9 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kR1.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.drive(
-              -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-              -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+              -MathUtil.applyDeadband(m_driverController.getLeftY() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
+              //-MathUtil.applyDeadband(m_visionDriveController.calculate(m_photonVisionCam1.getDistance(),0) * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
+              -MathUtil.applyDeadband(m_driverController.getLeftX() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
               1.0 * m_visionTurnController.calculate(m_photonVisionCam1.getYaw(),0),
               true
             ), 
@@ -156,32 +169,15 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kL1.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.drive(
-              -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-              -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+              -MathUtil.applyDeadband(m_driverController.getLeftY() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
+              //-MathUtil.applyDeadband(m_visionDriveController.calculate(m_photonVisionCam2.getDistance(),0) * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
+              -MathUtil.applyDeadband(m_driverController.getLeftX() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
               1.0 * m_visionTurnController.calculate(m_photonVisionCam2.getYaw(),0),
               true
             ), 
             m_robotDrive));
 
   }
-
- /* private void configureButtonBindingsXbox() {
-    // DRIVE (INCLUDES KILL SWITCH on B press)
-    new JoystickButton(m_driverController, Button.kB.value)
-        .whileFalse(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
-
-    // DUMPSTER
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .whileTrue(new StartEndCommand(
-            () -> {
-              m_dumpster.runDumpster(0.2);
-            },
-            () -> {
-              m_dumpster.runDumpster(0);
-            }));
-  }*/
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
