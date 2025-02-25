@@ -15,6 +15,8 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PS5Controller.Button;
 //import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
@@ -23,11 +25,16 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.Constants.PhotonVision;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.events.EventTrigger;
 
 import frc.robot.subsystems.Dumpster;
 import frc.robot.subsystems.VisionSubsystem;
@@ -48,6 +55,10 @@ public class RobotContainer {
   private final PIDController m_visionDriveController = new PIDController(PhotonVision.visionDrivekP, 0, PhotonVision.visionDrivekD);
 
 
+  private final SendableChooser<Command> autoChooser_L;
+  private final SendableChooser<Command> autoChooser_R;
+  private final SendableChooser<Command> autoChooser_M;
+  private final SendableChooser<Command> autoChooser_D;
   // The driver's controller
   //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   PS5Controller m_driverController = new PS5Controller(OIConstants.kDriverControllerPort);
@@ -73,7 +84,23 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
-  }
+
+            
+            NamedCommands.registerCommand("dumpCoral", Commands.startEnd(() -> m_dumpster.runDumpster(-0.2), () -> m_dumpster.runDumpster(0), m_dumpster)); 
+    
+            NamedCommands.registerCommand("ReleaseCoral", Commands.startEnd(() -> m_dumpster.runDumpster(-0.2), () -> m_dumpster.runDumpster(0), m_dumpster));             
+            autoChooser_L = AutoBuilder.buildAutoChooser("AutonL_Auto");
+            SmartDashboard.putData("Auto Mode", autoChooser_L);
+
+            autoChooser_R = AutoBuilder.buildAutoChooser("AutonR-Auto");
+            SmartDashboard.putData("Auto Mode", autoChooser_R);
+
+            autoChooser_M = AutoBuilder.buildAutoChooser("AutonM-Auto");
+            SmartDashboard.putData("Auto Mode", autoChooser_M);
+
+            autoChooser_D = AutoBuilder.buildAutoChooser("AutonD-Auto");
+            SmartDashboard.putData("Auto Mode", autoChooser_D);      
+  }   
 
   /**
    * Use this method to define your button->command mappings. Buttons can be

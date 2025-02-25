@@ -1,5 +1,5 @@
-# SwerveKitbot2025
- 2/8/25 MAXSwerve-Java-Template Fork w/ Dumpster
+# SwerveBot w/ Auton Paths
+ 2/22/25 MAXSwerve-Java-Template Fork w/ Dumpster
 
 - Works w/ PS5 controller, Xbox code is commented out
 - Will work with ADIS16470 IMU
@@ -14,3 +14,4 @@
 - L2 - Reverse dumpster
 - R1 - Align front with vision
 - L1 - Align back with vision
+7
