@@ -84,8 +84,9 @@ public class RobotContainer {
             m_robotDrive));
 
             
-            NamedCommands.registerCommand("dumpCoral", Commands.runOnce(()->{m_dumpster.runDumpster(0.2);})); 
-            NamedCommands.registerCommand("ReleaseCoral", Commands.runOnce(()->{m_dumpster.runDumpster(0.2);}));            
+            NamedCommands.registerCommand("dumpCoral", Commands.startEnd(() -> m_dumpster.runDumpster(-0.2), () -> m_dumpster.runDumpster(0), m_dumpster)); 
+    
+            NamedCommands.registerCommand("ReleaseCoral", Commands.startEnd(() -> m_dumpster.runDumpster(-0.2), () -> m_dumpster.runDumpster(0), m_dumpster));             
             autoChooser_L = AutoBuilder.buildAutoChooser("AutonL_Auto");
             SmartDashboard.putData("Auto Mode", autoChooser_L);
 
