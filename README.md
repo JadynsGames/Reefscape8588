@@ -6,7 +6,7 @@
 - Includes Dumpster subsystem actived by R2
 - Includes Swerve kill switch activated by L3
 
-Keybinds
+**Keybinds**
 Triangle - Set yaw to zero
 L3 - Killswitch
 R3 - Lower dumpster speed
