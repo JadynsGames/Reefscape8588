@@ -14,4 +14,4 @@
 - L2 - Reverse dumpster
 - R1 - Align front with vision
 - L1 - Align back with vision
-7
+- Square - Lock in coral
