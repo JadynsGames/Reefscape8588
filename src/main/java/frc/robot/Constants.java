@@ -44,7 +44,7 @@ public final class Constants {
 
   public static final class DriveConstants {
     // Lower speed by percentage
-    public static final double kDriveThrottle = 0.5;
+    public static final double kDriveThrottle = 1;
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.8;

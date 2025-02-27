@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "dumpCoral"
+            "name": "ReleaseCoral"
           }
         },
         {
@@ -37,7 +37,7 @@
         {
           "type": "named",
           "data": {
-            "name": "dumpCoral"
+            "name": "ReleaseCoral"
           }
         },
         {
@@ -61,7 +61,7 @@
         {
           "type": "named",
           "data": {
-            "name": "dumpCoral"
+            "name": "ReleaseCoral"
           }
         }
       ]
