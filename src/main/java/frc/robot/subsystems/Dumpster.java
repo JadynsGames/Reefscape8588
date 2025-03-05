@@ -13,6 +13,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import frc.robot.Constants;
 import frc.robot.Constants.SubsystemConstants;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Dumpster extends SubsystemBase {
@@ -34,6 +36,14 @@ public class Dumpster extends SubsystemBase {
   
   public void runDumpster(double speed) {
     m_dumpsterDown.set(dumpsterSpeed*speed);
+  }
+
+  public Command dumpsterOnCommand() {
+    return this.runOnce(() -> runDumpster(SubsystemConstants.kDumpsterSlow));
+  }
+
+  public Command dumpsterOffCommand() {
+    return this.runOnce(() -> runDumpster(0));
   }
 
   public void slowMode(boolean isSlow) {
