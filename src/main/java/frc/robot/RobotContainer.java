@@ -54,11 +54,9 @@ public class RobotContainer {
   private final PIDController m_visionTurnController = new PIDController(PhotonVision.visionTurnkP, 0, PhotonVision.visionTurnkD);
   private final PIDController m_visionDriveController = new PIDController(PhotonVision.visionDrivekP, 0, PhotonVision.visionDrivekD);
 
+// Path follower here
+  private final SendableChooser<Command> autoChooser;
 
-  private final SendableChooser<Command> autoChooser_L;
-  private final SendableChooser<Command> autoChooser_R;
-  private final SendableChooser<Command> autoChooser_M;
-  private final SendableChooser<Command> autoChooser_D;
   // The driver's controller
   //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   PS5Controller m_driverController = new PS5Controller(OIConstants.kDriverControllerPort);
@@ -86,20 +84,10 @@ public class RobotContainer {
             m_robotDrive));
 
             
-            NamedCommands.registerCommand("dumpCoral", Commands.startEnd(() -> m_dumpster.runDumpster(-0.2), () -> m_dumpster.runDumpster(0), m_dumpster)); 
-    
-            NamedCommands.registerCommand("ReleaseCoral", Commands.startEnd(() -> m_dumpster.runDumpster(-0.2), () -> m_dumpster.runDumpster(0), m_dumpster));             
-            autoChooser_L = AutoBuilder.buildAutoChooser("AutonL_Auto");
-            SmartDashboard.putData("Auto Mode", autoChooser_L);
-
-            autoChooser_R = AutoBuilder.buildAutoChooser("AutonR-Auto");
-            SmartDashboard.putData("Auto Mode", autoChooser_R);
-
-            autoChooser_M = AutoBuilder.buildAutoChooser("AutonM-Auto");
-            SmartDashboard.putData("Auto Mode", autoChooser_M);
-
-            autoChooser_D = AutoBuilder.buildAutoChooser("AutonD-Auto");
-            SmartDashboard.putData("Auto Mode", autoChooser_D);      
+            NamedCommands.registerCommand("ReleaseCoral", m_dumpster.dumpsterOnCommand()); 
+            NamedCommands.registerCommand("StopCoral", m_dumpster.dumpsterOffCommand()); 
+            autoChooser = AutoBuilder.buildAutoChooser();
+            SmartDashboard.putData("Auto Mode", autoChooser);            
   }   
 
   /**
@@ -186,42 +174,45 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(DriveConstants.kDriveKinematics);
+    // TrajectoryConfig config = new TrajectoryConfig(
+    //     AutoConstants.kMaxSpeedMetersPerSecond,
+    //     AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+    //     // Add kinematics to ensure max speed is actually obeyed
+    //     .setKinematics(DriveConstants.kDriveKinematics);
 
-    // An example trajectory to follow. All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
-        config);
+    // // An example trajectory to follow. All units in meters.
+    // Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+    //     // Start at the origin facing the +X direction
+    //     new Pose2d(0, 0, new Rotation2d(0)),
+    //     // Pass through these two interior waypoints, making an 's' curve path
+    //     List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+    //     // End 3 meters straight ahead of where we started, facing forward
+    //     new Pose2d(3, 0, new Rotation2d(0)),
+    //     config);
 
-    var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    // var thetaController = new ProfiledPIDController(
+    //     AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+    // thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        m_robotDrive::getPose, // Functional interface to feed supplier
-        DriveConstants.kDriveKinematics,
+    // SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+    //     exampleTrajectory,
+    //     m_robotDrive::getPose, // Functional interface to feed supplier
+    //     DriveConstants.kDriveKinematics,
 
-        // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
+    //     // Position controllers
+    //     new PIDController(AutoConstants.kPXController, 0, 0),
+    //     new PIDController(AutoConstants.kPYController, 0, 0),
+    //     thetaController,
+    //     m_robotDrive::setModuleStates,
+    //     m_robotDrive);
 
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+    // // Reset odometry to the starting pose of the trajectory.
+    // m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
-    // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
+    // // Run path following command, then stop at the end.
+    // return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
+
+    return autoChooser.getSelected();
+
   }
 }
