@@ -7,6 +7,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.RobotController;
 
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -18,6 +21,7 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Configs;
+import frc.robot.Constants;
 
 public class MAXSwerveModule {
   private final SparkMax m_drivingSpark;
@@ -61,6 +65,27 @@ public class MAXSwerveModule {
     m_drivingEncoder.setPosition(0);
   }
 
+  // SYS ID STUFF
+  public void setDriveVoltage(Voltage v) {
+    m_drivingSpark.setVoltage(v);
+}
+
+public double getDriveVoltage() {
+    return m_drivingSpark.getAppliedOutput() * m_drivingSpark.getBusVoltage();
+}
+
+public double getDrivePosition() {
+    //return m_drivingEncoder.getPosition() * Constants.ModuleConstants.kWheelCircumferenceMeters; // Returns position in native units (rotations)
+    return m_drivingEncoder.getPosition(); // Returns position in native units (rotations)
+}
+
+public double getDriveVelocity() {
+    //return (m_drivingEncoder.getVelocity() * Constants.ModuleConstants.kWheelCircumferenceMeters) / 60; // Returns velocity in m/s
+    return m_drivingEncoder.getVelocity(); // Returns velocity in m/s
+}
+
+
+
   /**
    * Returns the current state of the module.
    *
@@ -99,6 +124,7 @@ public class MAXSwerveModule {
 
     // Optimize the reference state to avoid spinning further than 90 degrees.
     correctedDesiredState.optimize(new Rotation2d(m_turningEncoder.getPosition()));
+    // SYS ID!! COMMENT THIS OUT TO RUN IT 
 
     // Command driving and turning SPARKS towards their respective setpoints.
     m_drivingClosedLoopController.setReference(correctedDesiredState.speedMetersPerSecond, ControlType.kVelocity);
@@ -111,4 +137,6 @@ public class MAXSwerveModule {
   public void resetEncoders() {
     m_drivingEncoder.setPosition(0);
   }
+
+  
 }

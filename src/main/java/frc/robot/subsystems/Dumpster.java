@@ -13,12 +13,13 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import frc.robot.Constants;
 import frc.robot.Constants.SubsystemConstants;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Dumpster extends SubsystemBase {
   private SparkMax m_dumpsterDown;
 
-  private double dumpsterSpeed = SubsystemConstants.kDumpsterFast;
+  private double dumpsterSpeed = SubsystemConstants.kDumpsterSlow;
 
   public Dumpster() {
     m_dumpsterDown =  new SparkMax(Constants.SubsystemConstants.kDumpsterId, MotorType.kBrushless);
@@ -35,12 +36,22 @@ public class Dumpster extends SubsystemBase {
   public void runDumpster(double speed) {
     m_dumpsterDown.set(dumpsterSpeed*speed);
   }
+  public Command startDumpsterCommand(){
+    return this.runOnce(() -> runDumpster(-1));
+  }
+  public Command stopDumpsterCommand(){
+    return this.runOnce(() -> runDumpster(0));
+  }
 
-  public void slowMode(boolean isSlow) {
-    if (isSlow) {
-      dumpsterSpeed = SubsystemConstants.kDumpsterSlow;
-    } else {
+  public Command lockDumpsterCommand(){
+    return this.runOnce(() -> runDumpster(-1*SubsystemConstants.kDumpsterLock));
+  }
+
+  public void fastMode(boolean isFast) {
+    if (isFast) {
       dumpsterSpeed = SubsystemConstants.kDumpsterFast;
+    } else {
+      dumpsterSpeed = SubsystemConstants.kDumpsterSlow;
     }
   }
 

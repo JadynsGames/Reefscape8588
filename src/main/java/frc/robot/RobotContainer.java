@@ -24,8 +24,11 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.Constants.PhotonVision;
+import frc.robot.Constants.SubsystemConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -38,6 +41,8 @@ import com.pathplanner.lib.events.EventTrigger;
 
 import frc.robot.subsystems.Dumpster;
 import frc.robot.subsystems.VisionSubsystem;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -83,7 +88,10 @@ public class RobotContainer {
             m_robotDrive));
 
             
-            NamedCommands.registerCommand("ReleaseCoral", Commands.startEnd(() -> m_dumpster.runDumpster(-0.2), () -> m_dumpster.runDumpster(0), m_dumpster));             
+            NamedCommands.registerCommand("ReleaseCoral", m_dumpster.startDumpsterCommand());
+            NamedCommands.registerCommand("StopDumpster",m_dumpster.stopDumpsterCommand());
+            NamedCommands.registerCommand("LockCoral",m_dumpster.lockDumpsterCommand());
+
             autoChooser = AutoBuilder.buildAutoChooser();
             SmartDashboard.putData("Auto Mode", autoChooser); 
   }   
@@ -98,6 +106,30 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+    // SYS ID
+    /*
+    new JoystickButton(m_driverController, Button.kTriangle.value)
+      .whileTrue(new ParallelCommandGroup(
+        new RunCommand( () ->
+          m_robotDrive.resetEncoders()
+        ),
+        m_robotDrive.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
+      ));
+    new JoystickButton(m_driverController, Button.kCross.value)
+      .whileTrue(m_robotDrive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    new JoystickButton(m_driverController, Button.kSquare.value)
+      .whileTrue(m_robotDrive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    new JoystickButton(m_driverController, Button.kCircle.value)
+      .whileTrue(m_robotDrive.sysIdDynamic(SysIdRoutine.Direction.kReverse));*/
+
+    // TINY DUMPSTER (LOCK CORAL)
+    new JoystickButton(m_driverController, Button.kSquare.value)
+    .whileTrue(new InstantCommand(
+        () -> {
+          m_dumpster.runDumpster(-1*SubsystemConstants.kDumpsterLock);
+        }));
+
+
     // SET ZERO YAW
     new JoystickButton(m_driverController, Button.kTriangle.value)
         .whileTrue(new RunCommand(
@@ -114,10 +146,10 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kR3.value)
         .whileTrue(new StartEndCommand(
             () -> {
-              m_dumpster.slowMode(true);
+              m_dumpster.fastMode(true);
             },
             () -> {
-              m_dumpster.slowMode(false);
+              m_dumpster.fastMode(false);
             }));
 
     // DUMPSTER
@@ -162,16 +194,6 @@ public class RobotContainer {
               true
             ), 
             m_robotDrive));
-
-      // TINY DUMPSTER
-    new JoystickButton(m_driverController, Button.kSquare.value)
-    .whileTrue(new StartEndCommand(
-        () -> {
-          m_dumpster.runDumpster(-0.08);
-        },
-        () -> {
-          m_dumpster.runDumpster(0);
-        }));
 
   }
 

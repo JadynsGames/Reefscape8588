@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4503125,
-        "y": 7.218125
+        "x": 1.254,
+        "y": 7.025
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.29125,
-        "y": 5.8653125
+        "x": 2.0949374999999995,
+        "y": 5.672187500000001
       },
       "isLocked": false,
       "linkedName": "Step 4"
     },
     {
       "anchor": {
-        "x": 3.1565625,
-        "y": 4.341874999999999
+        "x": 3.101164772727273,
+        "y": 4.149644886363635
       },
       "prevControl": {
-        "x": 2.2425,
-        "y": 5.82875
+        "x": 2.187102272727273,
+        "y": 5.6365198863636365
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,14 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "ReleaseCoral",
-      "waypointRelativePos": 1.0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -55,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -52.59464336859143
+    "rotation": -54.0
   },
   "useDefaultConstraints": true
 }

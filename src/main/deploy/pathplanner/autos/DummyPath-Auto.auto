@@ -5,15 +5,34 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "sequential",
           "data": {
-            "pathName": "DummyPath"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ReleaseCoral"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "DummyPath"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ReleaseCoral"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StopDumpster"
+                }
+              }
+            ]
           }
         }
       ]

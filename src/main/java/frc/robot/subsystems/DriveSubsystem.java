@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -19,11 +23,19 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.measure.MutDistance;
+import edu.wpi.first.units.measure.MutLinearVelocity;
+import edu.wpi.first.units.measure.MutVoltage;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.DriveConstants;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -141,6 +153,59 @@ public class DriveSubsystem extends SubsystemBase {
         pose);
   }
 
+   // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+  private final MutVoltage m_appliedVoltage = Volts.mutable(0);
+  // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
+  private final MutDistance m_distance = Meters.mutable(0);
+  // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
+  private final MutLinearVelocity m_velocity = MetersPerSecond.mutable(0);
+
+  // Create a new SysId routine for characterizing the drive.
+  private final SysIdRoutine m_sysIdRoutine =
+    new SysIdRoutine(
+        new SysIdRoutine.Config(),
+        new SysIdRoutine.Mechanism(
+            // Apply voltage to each swerve module's drive motor
+            voltage -> {
+                m_frontLeft.setDriveVoltage(voltage);
+                m_frontRight.setDriveVoltage(voltage);
+                m_rearLeft.setDriveVoltage(voltage);
+                m_rearRight.setDriveVoltage(voltage);
+            },
+            // Log encoder values for characterization
+            log -> {
+                log.motor("front-left")
+                    .voltage(
+                      m_appliedVoltage.mut_replace(
+                          m_frontLeft.getDriveVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(m_frontLeft.getDrivePosition(), Meters))
+                    .linearVelocity(
+                        m_velocity.mut_replace(m_frontLeft.getDriveVelocity(), MetersPerSecond));
+                log.motor("front-right")
+                    .voltage(
+                      m_appliedVoltage.mut_replace(
+                          m_frontRight.getDriveVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(m_frontRight.getDrivePosition(), Meters))
+                    .linearVelocity(
+                        m_velocity.mut_replace(m_frontRight.getDriveVelocity(), MetersPerSecond));
+                log.motor("rear-left")
+                    .voltage(
+                      m_appliedVoltage.mut_replace(
+                          m_rearLeft.getDriveVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(m_rearLeft.getDrivePosition(), Meters))
+                    .linearVelocity(
+                        m_velocity.mut_replace(m_rearLeft.getDriveVelocity(), MetersPerSecond));
+                log.motor("rear-right")
+                    .voltage(
+                      m_appliedVoltage.mut_replace(
+                          m_rearRight.getDriveVoltage(), Volts))
+                    .linearPosition(m_distance.mut_replace(m_rearRight.getDrivePosition(), Meters))
+                    .linearVelocity(
+                        m_velocity.mut_replace(m_rearRight.getDriveVelocity(), MetersPerSecond));
+            },
+            this));
+
+
   /**
    * Method to drive the robot using joystick info.
    *
@@ -232,5 +297,23 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getTurnRate() {
     return m_gyro.getRate(IMUAxis.kZ) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
+  /**
+   * Returns a command that will execute a quasistatic test in the given direction.
+   *
+   * @param direction The direction (forward or reverse) to run the test in
+   */
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return m_sysIdRoutine.quasistatic(direction);
+  }
+
+  /**
+   * Returns a command that will execute a dynamic test in the given direction.
+   *
+   * @param direction The direction (forward or reverse) to run the test in
+   */
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    return m_sysIdRoutine.dynamic(direction);
   }
 }
