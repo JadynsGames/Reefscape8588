@@ -179,7 +179,7 @@ public class RobotContainer {
               -MathUtil.applyDeadband(m_driverController.getLeftY() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
               //-MathUtil.applyDeadband(m_visionDriveController.calculate(m_photonVisionCam1.getDistance(),0) * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
               -MathUtil.applyDeadband(m_driverController.getLeftX() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
-              1.0 * m_visionTurnController.calculate(m_photonVisionCam1.getYaw(),0),
+              1.0 * m_visionTurnController.calculate(m_photonVisionCam2.getYaw(),0),
               true
             ), 
             m_robotDrive));
@@ -190,7 +190,7 @@ public class RobotContainer {
               -MathUtil.applyDeadband(m_driverController.getLeftY() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
               //-MathUtil.applyDeadband(m_visionDriveController.calculate(m_photonVisionCam2.getDistance(),0) * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
               -MathUtil.applyDeadband(m_driverController.getLeftX() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
-              1.0 * m_visionTurnController.calculate(m_photonVisionCam2.getYaw(),0),
+              1.0 * m_visionTurnController.calculate(m_photonVisionCam1.getYaw(),0),
               true
             ), 
             m_robotDrive));
