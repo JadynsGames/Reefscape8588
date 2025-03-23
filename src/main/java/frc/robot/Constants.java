@@ -8,6 +8,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -44,11 +45,23 @@ public final class Constants {
   }
 
   public static final class DriveConstants {
+    private static double ks = 0.25;
+    private static double kv = 2.75;
+    private static double ka = 0.49;
+    public static final SimpleMotorFeedforward m_driveFeedforward =
+    new SimpleMotorFeedforward(ks, kv, ka);
+
+    private static double a_ks = 0.19;
+    private static double a_kv = 2.72;
+    private static double a_ka = 0.39;
+    public static final SimpleMotorFeedforward m_angularFeedforward =
+    new SimpleMotorFeedforward(a_ks, a_kv, a_ka);
+
     // Lower speed by percentage
     public static final double kDriveThrottle = 1;
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 5; // 4.8
+    public static final double kMaxSpeedMetersPerSecond = 4.8; // 5
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     // Chassis configuration
@@ -100,8 +113,8 @@ public final class Constants {
   }
   public static final class PhotonVision {
         // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-        public static final Transform3d robotToCam =
-                new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
+        //public static final Transform3d robotToCam =
+                //new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0));
 
         // The layout of the AprilTags on the field
         public static final AprilTagFieldLayout tagLayout =

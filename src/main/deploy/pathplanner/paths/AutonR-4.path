@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0949374999999995,
-        "y": 5.672187500000001
+        "x": 2.1233661975967912,
+        "y": 6.394950505341034
       },
       "isLocked": false,
       "linkedName": "Step 4"
     },
     {
       "anchor": {
-        "x": 3.101164772727273,
-        "y": 4.149644886363635
+        "x": 3.729374999999999,
+        "y": 5.136832386363635
       },
       "prevControl": {
-        "x": 2.187102272727273,
-        "y": 5.6365198863636365
+        "x": 2.4207886661580984,
+        "y": 6.134222463465983
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -60.86570780277381
   },
   "reversed": false,
   "folder": null,

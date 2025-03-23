@@ -8,6 +8,10 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -17,6 +21,7 @@ import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -31,10 +36,18 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+
 
 
 public class DriveSubsystem extends SubsystemBase {
@@ -62,8 +75,14 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
 
+  private final VisionSubsystem m_photonVisionCam1 = new VisionSubsystem("Cam 1");
+  private final VisionSubsystem m_photonVisionCam2 = new VisionSubsystem("Cam 2");
+
+  public Field2d m_field = new Field2d();
+  public Field2d m_visionField = new Field2d();
+
   // Odometry class for tracking robot pose
-  SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
+  public SwerveDrivePoseEstimator m_odometry = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
       Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
       new SwerveModulePosition[] {
@@ -71,11 +90,14 @@ public class DriveSubsystem extends SubsystemBase {
           m_frontRight.getPosition(),
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
-      });
+      }, new Pose2d());//m_photonVisionCam1.getEstimationStdDevs(getPose())); //add this to tune vision better
 
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    // set our heading to be 180 degrees behind for quick field starting
+    m_gyro.setGyroAngleX(180);
+
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
     RobotConfig config;
@@ -87,8 +109,8 @@ public class DriveSubsystem extends SubsystemBase {
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(3.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(3.0, 0.0, 0.0) // Rotation PID constants
+                    new PIDConstants(8.0, 0.0, 0), // Translation PID constants (was 3.0)
+                    new PIDConstants(0.1, 0.0, 0) // Rotation PID constants (was 3.0)
             ),
             config, // The robot configuration
             () -> {
@@ -125,6 +147,13 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+
+    this.fuseVision();
+
+    m_field.setRobotPose(m_odometry.getEstimatedPosition());
+    System.out.println(m_odometry.getEstimatedPosition());
+    SmartDashboard.putData("Field", m_field);
+    SmartDashboard.putData("Vision Field", m_visionField);
   }
 
   /**
@@ -133,7 +162,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The pose.
    */
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    return m_odometry.getEstimatedPosition();
   }
 
   /**
@@ -151,6 +180,21 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         },
         pose);
+  }
+
+  private void fuseVision() {
+    Optional<EstimatedRobotPose> visionEstimate = m_photonVisionCam1.getEstimatedGlobalPose();
+
+    if (visionEstimate.isEmpty()) return;
+
+    m_visionField.setRobotPose(visionEstimate.get().estimatedPose.toPose2d());
+
+    this.m_odometry.addVisionMeasurement(
+        visionEstimate.get().estimatedPose.toPose2d(), visionEstimate.get().timestampSeconds);
+
+    SmartDashboard.putNumber("vision estimate x", visionEstimate.get().estimatedPose.getX());
+    SmartDashboard.putNumber("vision estimate y", visionEstimate.get().estimatedPose.getY());
+    SmartDashboard.putNumber("vision estimate z", visionEstimate.get().estimatedPose.getZ());
   }
 
    // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
@@ -237,6 +281,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void driveRobotRelative(ChassisSpeeds speeds){
     this.drive(speeds.vxMetersPerSecond,speeds.vyMetersPerSecond,speeds.omegaRadiansPerSecond,false);
   }
+
   public ChassisSpeeds getRobotRelativeSpeeds(){
     return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(),
                                                            m_frontRight.getState(),

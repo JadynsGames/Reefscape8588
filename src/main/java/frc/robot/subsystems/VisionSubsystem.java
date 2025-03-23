@@ -45,17 +45,18 @@ public class VisionSubsystem extends SubsystemBase {
         AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
         Transform3d robotToCam;
         if (cameraName == "Cam 1") {
-            // Cam 1 to robot
-            robotToCam = new Transform3d(new Translation3d(0.381, 0.0, -0.10), new Rotation3d(0,0,0));
+            // Cam 1 (front) to robot
+            // TODO GET ACTUAL MEASUREMENTS
+            robotToCam = new Transform3d(new Translation3d(0.381, 0.0, -0.10), new Rotation3d(0,0,0)); // in meters from center
         } else {
-            // Cam 2 to robot
-            robotToCam = new Transform3d(new Translation3d(-0.356, 0.0, 0.05), new Rotation3d(0,0,180));
+            // Cam 2 (back) to robot
+            robotToCam = new Transform3d(new Translation3d(-0.356, 0.0, 0.05), new Rotation3d(0,0,Math.PI)); // in meters from center, rotation is 180 degrees
         }
         photonEstimator =
                 new PhotonPoseEstimator(
                         tagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-
+    
     }
     
     public void getLatestResult() {
@@ -76,9 +77,11 @@ public class VisionSubsystem extends SubsystemBase {
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
         getLatestResult();
         var visionEst = photonEstimator.update(latestResult);
+        /* 
         double latestTimestamp = latestResult.getTimestampSeconds();
         boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
-        if (newResult) lastEstTimestamp = latestTimestamp;
+        if (newResult) lastEstTimestamp = latestTimestamp;*/
+
         return visionEst;
     }
 

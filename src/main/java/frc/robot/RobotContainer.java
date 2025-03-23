@@ -15,6 +15,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PS5Controller.Button;
@@ -52,12 +53,10 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  public final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Dumpster m_dumpster = new Dumpster();
-  private final VisionSubsystem m_photonVisionCam1 = new VisionSubsystem("Cam 1");
-  private final VisionSubsystem m_photonVisionCam2 = new VisionSubsystem("Cam 2");
-  private final PIDController m_visionTurnController = new PIDController(PhotonVision.visionTurnkP, 0, PhotonVision.visionTurnkD);
-  private final PIDController m_visionDriveController = new PIDController(PhotonVision.visionDrivekP, 0, PhotonVision.visionDrivekD);
+  //private final PIDController m_visionTurnController = new PIDController(PhotonVision.visionTurnkP, 0, PhotonVision.visionTurnkD);
+  //private final PIDController m_visionDriveController = new PIDController(PhotonVision.visionDrivekP, 0, PhotonVision.visionDrivekD);
 
 
   private final SendableChooser<Command> autoChooser;
@@ -69,7 +68,7 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    m_visionTurnController.setTolerance(1);
+    //m_visionTurnController.setTolerance(1);
     // Configure the button bindings
     configureButtonBindings();
     // XBOX VERSION
@@ -93,7 +92,7 @@ public class RobotContainer {
             NamedCommands.registerCommand("LockCoral",m_dumpster.lockDumpsterCommand());
 
             autoChooser = AutoBuilder.buildAutoChooser();
-            SmartDashboard.putData("Auto Mode", autoChooser); 
+            SmartDashboard.putData("Auto Mode", autoChooser);
   }   
 
   /**
@@ -171,7 +170,7 @@ public class RobotContainer {
         () -> {
           m_dumpster.runDumpster(0);
         }));
-
+/*
     // VISION
     new JoystickButton(m_driverController, Button.kR1.value)
         .whileTrue(new RunCommand(
@@ -193,7 +192,7 @@ public class RobotContainer {
               1.0 * m_visionTurnController.calculate(m_photonVisionCam1.getYaw(),0),
               true
             ), 
-            m_robotDrive));
+            m_robotDrive));*/
 
   }
 

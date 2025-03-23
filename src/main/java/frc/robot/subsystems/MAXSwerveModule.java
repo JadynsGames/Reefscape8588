@@ -11,6 +11,7 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.RobotController;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -111,11 +112,7 @@ public double getDriveVelocity() {
         new Rotation2d(m_turningEncoder.getPosition() - m_chassisAngularOffset));
   }
 
-  /**
-   * Sets the desired state for the module.
-   *
-   * @param desiredState Desired state with speed and angle.
-   */
+
   public void setDesiredState(SwerveModuleState desiredState) {
     // Apply chassis angular offset to the desired state.
     SwerveModuleState correctedDesiredState = new SwerveModuleState();
@@ -126,10 +123,14 @@ public double getDriveVelocity() {
     correctedDesiredState.optimize(new Rotation2d(m_turningEncoder.getPosition()));
     // SYS ID!! COMMENT THIS OUT TO RUN IT 
 
-    // Command driving and turning SPARKS towards their respective setpoints.
-    m_drivingClosedLoopController.setReference(correctedDesiredState.speedMetersPerSecond, ControlType.kVelocity);
-    m_turningClosedLoopController.setReference(correctedDesiredState.angle.getRadians(), ControlType.kPosition);
+    // FEEDFORWARD experimental
+    // Calculate the feedforward voltage (TODO add another feedforward for turning (neo 550 and calc ratio from l3 maxswerve))
+    double driveFeedforwardVoltage = Constants.DriveConstants.m_driveFeedforward.calculate(correctedDesiredState.speedMetersPerSecond);
+    double angularFeedforwardVoltage = Constants.DriveConstants.m_angularFeedforward.calculate(correctedDesiredState.speedMetersPerSecond);
 
+    // Command driving and turning SPARKS towards their respective setpoints. Pass in feedforward as well
+    m_drivingClosedLoopController.setReference(correctedDesiredState.speedMetersPerSecond, ControlType.kVelocity,ClosedLoopSlot.kSlot0);//, driveFeedforwardVoltage);
+    m_turningClosedLoopController.setReference(correctedDesiredState.angle.getRadians(), ControlType.kPosition,ClosedLoopSlot.kSlot0);//,angularFeedforwardVoltage);
     m_desiredState = desiredState;
   }
 
