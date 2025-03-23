@@ -48,7 +48,7 @@ public final class Constants {
     public static final double kDriveThrottle = 1;
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 5; // 4.8
+    public static final double kMaxSpeedMetersPerSecond = 4; // 4.8
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     // Chassis configuration
@@ -90,7 +90,7 @@ public final class Constants {
 
     // Calculations required for driving motor conversion factors and feed forward
     public static final double kDrivingMotorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 60;
-    public static final double kWheelDiameterMeters = 0.0762;
+    public static final double kWheelDiameterMeters = 0.0732;//.0732
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
     // teeth on the bevel pinion
@@ -127,7 +127,7 @@ public final class Constants {
 
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 2.5;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 

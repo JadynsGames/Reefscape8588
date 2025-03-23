@@ -8,6 +8,8 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import org.ejml.dense.row.mult.SubmatrixOps_FDRM;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -29,6 +31,7 @@ import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.DriveConstants;
@@ -87,7 +90,7 @@ public class DriveSubsystem extends SubsystemBase {
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(3.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(2.45, 0.0, 0.0), // Translation PID constants
                     new PIDConstants(3.0, 0.0, 0.0) // Rotation PID constants
             ),
             config, // The robot configuration
@@ -232,7 +235,28 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
+
+    SmartDashboard.putNumber("FL Spd Err",  swerveModuleStates[0].speedMetersPerSecond - m_frontLeft.getDriveVelocity());
   }
+
+  // method to drive a few inches back
+  public void driveABit(double speed) {
+    drive(0, speed, 0, false);
+  }
+
+  public Command driveABitCommand(){
+    
+    return this.runOnce(() -> driveABit(0.6));
+  }
+
+  public Command driveABitBackCommand(){
+    return this.runOnce(() -> driveABit(-0.6));
+  }
+
+  public Command stopMovingCommand(){
+    return this.runOnce(() -> driveABit(0));
+  }
+
 
   public void driveRobotRelative(ChassisSpeeds speeds){
     this.drive(speeds.vxMetersPerSecond,speeds.vyMetersPerSecond,speeds.omegaRadiansPerSecond,false);

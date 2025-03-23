@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.284628378378378,
-        "y": 0.9320101351351354
+        "x": 1.0769318181818182,
+        "y": 0.4701278409090912
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2251644794108687,
-        "y": 1.7144381574177436
+        "x": 2.017467919214309,
+        "y": 1.2525558631917
       },
       "isLocked": false,
       "linkedName": "startofintake1"
     },
     {
       "anchor": {
-        "x": 3.7748310810810812,
-        "y": 2.9577702702702697
+        "x": 3.629659090909091,
+        "y": 2.963025568181818
       },
       "prevControl": {
-        "x": 3.207968412310305,
-        "y": 2.482589415692524
+        "x": 2.673073710787724,
+        "y": 2.268714103104321
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,10 +31,22 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "FastCoralDrop",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "FastCoralDrop"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 2.5,
+    "maxAcceleration": 2.1,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

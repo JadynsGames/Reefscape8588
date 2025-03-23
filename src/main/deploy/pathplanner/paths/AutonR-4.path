@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.254,
-        "y": 7.025
+        "x": 0.9074147727272728,
+        "y": 7.4402698863636365
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0949374999999995,
-        "y": 5.672187500000001
+        "x": 1.7709508512208272,
+        "y": 6.7823496876097025
       },
       "isLocked": false,
       "linkedName": "Step 4"
     },
     {
       "anchor": {
-        "x": 3.101164772727273,
-        "y": 4.149644886363635
+        "x": 3.5399147727272733,
+        "y": 4.9972301136363635
       },
       "prevControl": {
-        "x": 2.187102272727273,
-        "y": 5.6365198863636365
+        "x": 2.3274658978846836,
+        "y": 5.890667310148117
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,10 +31,22 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "FastCoralDrop",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "FastCoralDrop"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 2.5,
+    "maxAcceleration": 2.1,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,7 +54,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -59.99999999999999
   },
   "reversed": false,
   "folder": null,

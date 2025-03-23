@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.903181818181818,
-        "y": 4.020014204545454
+        "x": 5.731418918918918,
+        "y": 4.0
       },
       "prevControl": {
-        "x": 6.670394932935918,
-        "y": 4.008026499627421
+        "x": 6.102613636363636,
+        "y": 4.010042613636363
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,17 +31,10 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "ReleaseCoral",
-      "waypointRelativePos": 0.99,
-      "endWaypointRelativePos": 0.99,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 2.5,
+    "maxAcceleration": 2.1,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

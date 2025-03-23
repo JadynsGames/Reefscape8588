@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2536966422542652,
-        "y": 7.025096661666514
+        "x": 0.9273579545454546,
+        "y": 7.430298295454545
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.387134142254266,
-        "y": 5.818534161666514
+        "x": 2.060795454545455,
+        "y": 6.2237357954545445
       },
       "isLocked": false,
       "linkedName": "Step 2"
     },
     {
       "anchor": {
-        "x": 3.570302897723739,
-        "y": 5.034822320061349
+        "x": 3.779232954545455,
+        "y": 5.156775568181818
       },
       "prevControl": {
-        "x": 2.400302897723739,
-        "y": 6.33888482006135
+        "x": 2.6092329545454547,
+        "y": 6.460838068181818
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,10 +31,22 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "ReleaseCoral",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ReleaseCoral"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 2.5,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -50,5 +62,5 @@
     "velocity": 0,
     "rotation": -54.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

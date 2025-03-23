@@ -41,30 +41,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LockCoral"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopDumpster"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "AutonR-2"
@@ -95,30 +71,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LockCoral"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopDumpster"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "AutonR-4"
@@ -127,7 +79,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ReleaseCoral"
+            "name": "FastCoralDrop"
           }
         },
         {

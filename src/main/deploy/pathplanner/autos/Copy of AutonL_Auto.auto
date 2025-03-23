@@ -1,0 +1,202 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AutonL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ReleaseCoral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.45
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopDumpster"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AutonL-1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.9
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LockCoral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.02
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopDumpster"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "DriveABit"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.32
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StopMoving"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ReleaseCoral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.45
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopDumpster"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "DriveABitBack"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.32
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StopMoving"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.95
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LockCoral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.02
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopDumpster"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "DriveABit"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.32
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StopMoving"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ReleaseCoral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.35
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopDumpster"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

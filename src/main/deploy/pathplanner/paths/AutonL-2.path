@@ -3,24 +3,24 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.304391891891892,
-        "y": 0.8430743243243239
+        "x": 1.0669602272727272,
+        "y": 0.4701278409090912
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2589665217667374,
-        "y": 1.5419715693460705
+        "x": 2.0215348571475724,
+        "y": 1.1690250859308375
       },
       "isLocked": false,
       "linkedName": "startofintake"
     },
     {
       "anchor": {
-        "x": 3.9131756756756757,
+        "x": 3.913,
         "y": 2.829307432432431
       },
       "prevControl": {
-        "x": 2.9569733193437915,
+        "x": 2.9567976436681156,
         "y": 2.1352800512390733
       },
       "nextControl": null,
@@ -31,10 +31,22 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "ReleaseCoral",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ReleaseCoral"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 2.5,
+    "maxAcceleration": 2.1,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

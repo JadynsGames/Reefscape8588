@@ -36,6 +36,9 @@ public class Dumpster extends SubsystemBase {
   public void runDumpster(double speed) {
     m_dumpsterDown.set(dumpsterSpeed*speed);
   }
+  public void runDumpsterFast() {
+    m_dumpsterDown.set(-1*Constants.SubsystemConstants.kDumpsterFast);
+  }
   public Command startDumpsterCommand(){
     return this.runOnce(() -> runDumpster(-1));
   }
@@ -45,6 +48,11 @@ public class Dumpster extends SubsystemBase {
 
   public Command lockDumpsterCommand(){
     return this.runOnce(() -> runDumpster(-1*SubsystemConstants.kDumpsterLock));
+  }
+
+  
+  public Command fastCoralDropCommand() {
+    return this.runOnce(() -> runDumpsterFast());
   }
 
   public void fastMode(boolean isFast) {
