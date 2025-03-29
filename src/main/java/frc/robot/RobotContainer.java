@@ -53,7 +53,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final Dumpster m_dumpster = new Dumpster();
+  public final Dumpster m_dumpster = new Dumpster();
   private final VisionSubsystem m_photonVisionCam1 = new VisionSubsystem("Cam 1");
   private final VisionSubsystem m_photonVisionCam2 = new VisionSubsystem("Cam 2");
   private final PIDController m_visionTurnController = new PIDController(PhotonVision.visionTurnkP, 0, PhotonVision.visionTurnkD);
