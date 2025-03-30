@@ -58,7 +58,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     }
     
-    public void getLatestResult() {
+    public PhotonPipelineResult getLatestResult() {
         this.unreadResults = camera.getAllUnreadResults();
        
         if (!unreadResults.isEmpty()) {
@@ -71,15 +71,19 @@ public class VisionSubsystem extends SubsystemBase {
             SmartDashboard.putBoolean("PhotonVision: Has Target", false);
             System.out.println("[PhotonVision] No new targets detected.");
         }
+        return latestResult;
     }
 
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
         getLatestResult();
+        if(latestResult != null){
         var visionEst = photonEstimator.update(latestResult);
         double latestTimestamp = latestResult.getTimestampSeconds();
         boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
         if (newResult) lastEstTimestamp = latestTimestamp;
         return visionEst;
+        }
+        return null;
     }
 
 
