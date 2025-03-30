@@ -54,8 +54,7 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   public final Dumpster m_dumpster = new Dumpster();
-  private final VisionSubsystem m_photonVisionCam1 = new VisionSubsystem("Cam 1");
-  private final VisionSubsystem m_photonVisionCam2 = new VisionSubsystem("Cam 2");
+
   private final PIDController m_visionTurnController = new PIDController(PhotonVision.visionTurnkP, 0, PhotonVision.visionTurnkD);
   private final PIDController m_visionDriveController = new PIDController(PhotonVision.visionDrivekP, 0, PhotonVision.visionDrivekD);
 
@@ -177,7 +176,7 @@ public class RobotContainer {
         }));
 
     // VISION
-    new JoystickButton(m_driverController, Button.kR1.value)
+    /*new JoystickButton(m_driverController, Button.kR1.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.drive(
               -MathUtil.applyDeadband(m_driverController.getLeftY() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
@@ -186,7 +185,7 @@ public class RobotContainer {
               1.0 * m_visionTurnController.calculate(m_photonVisionCam2.getYaw(),0),
               true
             ), 
-            m_robotDrive));
+            m_robotDrive));*/
     
     new JoystickButton(m_driverController, Button.kL1.value)
         .whileTrue(new RunCommand(
@@ -194,7 +193,7 @@ public class RobotContainer {
               -MathUtil.applyDeadband(m_driverController.getLeftY() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
               //-MathUtil.applyDeadband(m_visionDriveController.calculate(m_photonVisionCam2.getDistance(),0) * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
               -MathUtil.applyDeadband(m_driverController.getLeftX() * DriveConstants.kDriveThrottle, OIConstants.kDriveDeadband),
-              1.0 * m_visionTurnController.calculate(m_photonVisionCam1.getYaw(),0),
+              1.0 * m_visionTurnController.calculate(m_robotDrive.m_photonVisionCam1.getYaw(),0),
               true
             ), 
             m_robotDrive));

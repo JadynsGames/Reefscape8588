@@ -18,6 +18,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -35,6 +36,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -69,6 +71,9 @@ public class DriveSubsystem extends SubsystemBase {
   // field2d
   Field2d m_field = new Field2d();
 
+  //vision
+  public final VisionSubsystem m_photonVisionCam1 = new VisionSubsystem("Cam 1");
+
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
@@ -78,7 +83,7 @@ public class DriveSubsystem extends SubsystemBase {
           m_frontRight.getPosition(),
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
-      });
+      },new Pose2d());
 
 
   /** Creates a new DriveSubsystem. */
@@ -135,6 +140,20 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+// if(m_photonVisionCam1.getLatestResult() != null){
+//         // Correct pose estimate with vision measurements
+//         var visionEst = m_photonVisionCam1.getEstimatedGlobalPose();
+//         visionEst.ifPresent(
+//                 est -> {
+//                     // Change our trust in the measurement based on the tags we can see
+//                     //var estStdDevs = m_photonVisionCam1.getEstimationStdDevs();
+
+//                     m_odometry.addVisionMeasurement(
+//                             est.estimatedPose.toPose2d(), est.timestampSeconds);
+//                             System.out.println(est.estimatedPose.toPose2d());
+//                             System.out.println(est.timestampSeconds);
+//                 });
+//               }
 
       // update field
       m_field.setRobotPose(getPose());
